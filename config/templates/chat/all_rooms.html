@@ -1,0 +1,29 @@
+{% extends 'default.html' %}
+
+{% block title %} All Rooms {% endblock title %}
+
+{% block navi %}
+    <a href="{% url 'my_profile' %}">My profile</a>
+    <a href="{% url 'my_rooms' %}">My rooms</a>
+    <a class="active" href="#">All rooms</a>
+    <a href="{% url 'all_users' %}">All users</a>
+{% endblock navi %}
+
+{% block content %}
+    {% if all_rooms_list %}
+        {% for room in all_rooms_list %}
+            <div class="room-row">
+                <div class="room-name">
+                    <p>{{ room.title }}</p>
+                </div>
+                <div class="room-button">
+                    <button>
+                        <a href="{% url 'room' room.id %}">Войти в чат</a>
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2>No Rooms yet...</h2>
+    {% endif %}
+{% endblock content %}

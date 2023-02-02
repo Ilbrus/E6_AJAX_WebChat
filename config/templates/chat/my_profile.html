@@ -1,0 +1,52 @@
+{% extends 'default.html' %}
+{% load static %}
+
+{% block title %} My Profile {% endblock title %}
+
+{% block navi %}
+    <a class="active" href="#">My profile</a>
+    <a href="{% url 'my_rooms' %}">My rooms</a>
+    <a href="{% url 'all_rooms' %}">All rooms</a>
+    <a href="{% url 'all_users' %}">All users</a>
+{% endblock navi %}
+
+{% block content %}
+    <div class="center-card">
+        <img class="user-avatar-big" src="{{ userprofile.avatar.url }}" alt="can't load image">
+        <p>{{ userprofile.user.username }}</p>
+        <input class="input" type="text" placeholder="Your First Name..." id="user-firstname-input">
+        <p>
+            <button class="btn j-btn-update">Обновить имя</button>
+        </p>
+    </div>
+    <div>
+        <button>
+            <a href="{% url 'sign-out' %}">Log Out</a>
+        </button>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        const inputFirstName = document.getElementById("user-firstname-input");
+        inputFirstName.value = '{{ userprofile.user.first_name }}';
+
+        const btnUpdate = document.querySelector('.j-btn-update');
+
+        btnUpdate.addEventListener('click', () => {
+            $.ajax({
+                url: '/chat/update_firstname/',
+                data: {
+                    'first_name': inputFirstName.value,
+                    'user_profile_id': '{{ userprofile.id }}',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                type: 'POST'
+              }).done(function(response){
+                console.log(response);
+            });
+        });
+    </script>
+{% endblock %}
